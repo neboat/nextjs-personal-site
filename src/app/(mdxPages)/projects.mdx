@@ -1,0 +1,87 @@
+import { Reference } from "@/components/reference"
+import { LinkList } from "@/components/links"
+
+export const metadata = {
+    title: 'Projects',
+    description: 'Descriptions of assorted projects'
+}
+
+# Projects
+
+## OpenCilk
+
+<LinkList links={[
+  { text: "Website", url: "https://www.opencilk.org/", },
+  { text: "GitHub organization", url: "https://github.com/OpenCilk/" },
+]} />
+
+[OpenCilk](https://www.opencilk.org/) is the latest open-source implementation of the Cilk task-parallel programming platform.
+
+```cilkcpp {4-5}
+int fib(int n) {
+    if (n < 2) return n;
+    int x, y;
+    cilk_scope {
+        x = cilk_spawn fib(n-1);
+        y = fib(n-2);
+    }
+    return x + y;
+}
+```
+
+OpenCilk extends C/C++ with a few keywords to expose logical task parallelism in a program.  The OpenCilk compiler optimizes Cilk programs using Tapir/LLVM, an extension to LLVM to enable effective compiler analysis and optimization of task-parallel programs.  The OpenCilk runtime system schedules and load-balances the Cilk computation automatically in a provably good manner using randomized work stealing.  The OpenCilk platform also provides tools to analyze Cilk programs, including the Cilksan race detector and the Cilkscale scalability analyzer.
+
+OpenCilk is completely open source and available on [GitHub](https://github.com/OpenCilk/).  OpenCilk features the latest implementation of the Tapir compiler extension for task parallelism.
+
+<Reference citekeys={["SchardlLe23", "SchardlMoLe19", "SchardlMoLe17"]} />
+
+## CESMIX
+
+[CESMIX](https://cesmix.mit.edu) is an interdisciplinary research center at MIT focused on the exascale simulation of materials in hypersonic flow environments.  See the CESMIX website for details.
+
+## Other projects
+
+You can find most of the other software projects itself on or linked from [my personal GitHub](https://github.com/neboat).
+
+### fccode LaTeX package
+
+<LinkList links={[
+  { text: "fccode Overleaf port and documentation",
+    url: "https://www.overleaf.com/read/gbqhfyncbgby#309f8a", },
+]} />
+
+The fccode package provides fast, safe, and high-quality syntax highlighting of code for LaTeX documents.  This package provides LaTeX macros, commands, and environments for syntax-highlighted code figures, in-paragraph code blocks, and inline code snippets.  This package uses Pygments to syntax-highlight code, and it includes custom Pygments lexers and formatters to improve syntax-highlighting quality to add new features, including the following:
+
+- Selecting regions of source files to highlight.
+- Support LaTeX `\label{}` commands in code, allowing the document to use `\ref{}` commands to reference lines in the code symbolically.
+
+This package includes `latexmk` rules and scripts to syntax-highlight code efficiently, in a manner that scales to handle very large documents with lots of code to highlight.  In particular, fccode avoids the need for LaTeX's `--shell-escape` option.
+
+### Code-highlighter tool for slide decks
+
+<LinkList links={[
+  { text: "Code highlighter", url: "/code-highlight", },
+]} />
+
+This web-based tool adds syntax and semantic highlighting to C/C++ and Cilk code to be easily copy-and-pasted into slide decks.
+
+### PBFS
+
+<LinkList links={[
+  { text: "GitHub", url: "https://github.com/neboat/pbfs" }
+]} />
+
+PBFS is a work-efficient parallel breadth-first-search (BFS) algorithm.  PBFS uses a custom reducer data structure, called a bag, to efficiently maintain sets of vertices.  PBFS is currently implemented in OpenCilk, and the bag reducer is implemented using the linguistic reducer syntax introduced in OpenCilk 2.
+
+<Reference citekeys={["LeisersonSc10"]} />
+
+### Materials for "There's plenty of room at the Top"
+
+<LinkList links={[
+  { text: "GitHub", url: "https://github.com/neboat/Moore", },
+  { text: "DOI", url: "https://zenodo.org/doi/10.5281/zenodo.3715520", },
+]} />
+
+This repository contains the data and software used for the Science article, "There's plenty of room at the Top: What will drive computer performance after Moore's law?"
+
+<Reference citekeys={["LeisersonThEm20"]} />

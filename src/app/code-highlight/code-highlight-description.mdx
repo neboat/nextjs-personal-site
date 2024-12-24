@@ -1,0 +1,31 @@
+import { Alert } from "@/components/alert"
+
+## About this tool
+
+This tool adds syntax highlighting to code for pasting into slide decks.  It supports highlighting of C/C++ code with Cilk's language extensions for
+task-parallel programming.
+
+## How to use it
+
+1. Enter the code you want to highlight into the form.  A syntax-highlighted version of that code will appear in the output box as you type.
+2. Click the `Copy` button to copy the HTML of the syntax-highlighted version of the code, then paste that HTML into your slide editor: PowerPoint, Keynote, etc.
+
+Use the drop-down menus above the output box to change the programming language and theme used to highlight the code.
+
+<Alert kind="important">
+Some systems, such as PowerPoint on macOS, do not preserve all of the spacing in the original HTML.  In these cases, you can paste the HTML into a text editor, to generate RTF, and then copy and paste that RTF into your slide.
+</Alert>
+
+## Troubleshooting
+
+If your code uses a custom data type that is not defined in the code snippet, then the highlighter might not properly highlight that type or variables that use it.  You can fix this issue by adding a `typedef` or other statement that defines that type, even if the definition is incomplete.
+
+## Technical details
+
+This tool runs locally in your browser.  Nothing you enter is sent to any server or recorded.
+
+This tool uses the [Shiki syntax highlighter](https://shiki.matsu.io/) with two extensions:
+1. Custom C/C++ TextMate grammars, based on [better-cpp-syntax](https://github.com/jeff-hykin/better-cpp-syntax), that support the Cilk language extension; and
+2. A simple, custom semantic highlighter for C and C++.
+
+Found a bug?  [Please let me know.](https://github.com/neboat/nextjs-personal-site/issues)
