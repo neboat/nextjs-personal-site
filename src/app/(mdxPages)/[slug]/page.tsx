@@ -1,5 +1,5 @@
 import * as React from "react"
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata } from 'next'
 
 export default async function MdxPage({
     params,
@@ -15,12 +15,10 @@ export default async function MdxPage({
 
 type Props = {
     params: Promise<{ slug: string }>
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateMetadata(
-    { params, searchParams }: Props,
-    parent: ResolvingMetadata
+    { params }: Props
 ): Promise<Metadata> {
     // read route params
     const slug = (await params).slug

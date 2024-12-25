@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.bib$/, // Adjust the file extension as needed
+      use: 'raw-loader',
+    });
+
+    return config;
+  },
 };
 
 const withMDX = createMDX({

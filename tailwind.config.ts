@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from 'tailwindcss/plugin';
 
 export default {
   darkMode: 'selector',
@@ -19,11 +20,11 @@ export default {
     require('@tailwindcss/typography'),
     // New plugin to separately handle inline code.
     // https://github.com/tailwindlabs/tailwindcss/discussions/12496
-    function ({ addVariant }) {
+    plugin(function ({ addVariant }) {
       addVariant(
         'prose-inline-code',
         '&.prose :where(:not(pre)>code):not(:where([class~="not-prose"] *))'
       );
-    },
+    }),
   ],
 } satisfies Config;

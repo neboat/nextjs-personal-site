@@ -1,4 +1,4 @@
-import { getSingletonHighlighter, ThemedToken } from 'shiki'
+import { BundledLanguage, BundledTheme, getSingletonHighlighter, LanguageInput, ThemedToken, ThemeInput } from 'shiki'
 import { SemanticHighlight } from '../semantichighlight'
 import { expect, test } from 'vitest'
 
@@ -13,10 +13,10 @@ import cilkbookTheme from '../../codethemes/cilkbook.json'
 // theme.
 const makeHighlighter = async () => {
     const highlighter = await getSingletonHighlighter({
-        themes: [cilkbookTheme],
+        themes: [cilkbookTheme as ThemeInput],
         langs: ['c', 'cpp',
-            { ...cilkcppGrammar },
-            { ...cilkcGrammar }]
+            { ...cilkcppGrammar } as unknown as LanguageInput,
+            { ...cilkcGrammar } as unknown as LanguageInput]
     })
     return highlighter
 }
@@ -26,8 +26,8 @@ const makeHighlighter = async () => {
 const TestHighlight = async (code: string, lang: string, theme: string = 'cilkbook') => {
     const highlighter = await makeHighlighter()
     const tokens = highlighter.codeToTokensBase(code, {
-        lang: lang,
-        theme: theme,
+        lang: lang as BundledLanguage,
+        theme: theme as BundledTheme,
         includeExplanation: true
     })
     const _theme = highlighter.getTheme(theme)
@@ -41,8 +41,8 @@ const checkTokenScopes = (
     tokens: ThemedToken[][],
     expected: { content: string, scopeName: string[], notScopeName?: string[] }[]
 ) => {
-    var eIdx = 0
-    var lastMatch = ''
+    let eIdx = 0
+    let lastMatch = ''
     // Scan each token in each line.
     for (const line of tokens) {
         for (const tok of line) {

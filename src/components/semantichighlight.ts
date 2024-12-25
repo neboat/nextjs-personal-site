@@ -1,10 +1,23 @@
 import { ThemedToken, ThemeRegistrationResolved } from 'shiki/bundle/web'
+import { FontStyle, IRawThemeSetting } from '@shikijs/vscode-textmate'
 
 const DEBUG = false
 
-function debug_print(str) {
+function debug_print(str: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     if (DEBUG)
         console.log(str)
+}
+
+/**
+ * Copied from @shikijs/vscode-textmate.
+ */
+const enum MyFontStyle {
+    NotSet = -1,
+    None = 0,
+    Italic = 1,
+    Bold = 2,
+    Underline = 4,
+    Strikethrough = 8
 }
 
 /**
@@ -25,8 +38,8 @@ type ExplainedSubtoken = {
 function getExplainedSubtokens(parsedToken: ThemedToken) {
     const explanation = parsedToken["explanation"]
     if (explanation) {
-        var tokenScopes: ExplainedSubtoken[] = []
-        var index = 0
+        const tokenScopes: ExplainedSubtoken[] = []
+        let index = 0
         for (const explained of explanation) {
             const content = explained.content
             const scopes = explained.scopes.map(scope => scope.scopeName)
@@ -70,7 +83,7 @@ type SemanticScope =
  */
 // Copied from shiki source.
 function matchesOne(selector: string, scope: string): boolean {
-    let selectorPrefix = selector + '.'
+    const selectorPrefix = selector + '.'
     if (selector === scope || scope.substring(0, selectorPrefix.length) === selectorPrefix) {
         return true
     }
@@ -128,8 +141,8 @@ function explainThemeScope(
     theme: ThemeRegistrationResolved,
     scope: string,
     parentScopes: string[],
-): any[] {
-    const result: any[] = []
+): IRawThemeSetting[] {
+    const result = []
     let resultLen = 0
     for (let i = 0, len = theme.settings.length; i < len; i++) {
         const setting = theme.settings[i]
@@ -274,16 +287,30 @@ class ParsedTokenCursor {
         return newToken
     }
 
+    getFontStyle(fontStyleString?: string): FontStyle {
+        let fontStyle: MyFontStyle = MyFontStyle.None
+        if (fontStyleString) {
+            if (fontStyleString.includes('bold'))
+                fontStyle |= MyFontStyle.Bold
+
+            if (fontStyleString.includes('italic'))
+                fontStyle |= MyFontStyle.Italic
+
+            if (fontStyleString.includes('underline'))
+                fontStyle |= MyFontStyle.Underline
+        }
+        return fontStyle as unknown as FontStyle
+    }
+
     /**
      * Create a new themed token from the current subtoken.
      * @param newScope Optional new scope to add to the new themed token.
      * @returns A new themed token, based on the original, with the content of the current subtoken and an additional new scope, if provided.
      */
     createNewThemedToken(newScope?: { name: string }): ThemedToken {
-        const token = this.parsed
         const explained = this.current()
         // Setup new token based on previous token.
-        var newToken: ThemedToken = this.createThemedTokenFromSubtoken(explained)
+        const newToken: ThemedToken = this.createThemedTokenFromSubtoken(explained)
         // Setup token explanation.
         if (newToken.explanation)
             // If there's a new explanation, push it to the list of explanations.
@@ -293,7 +320,7 @@ class ParsedTokenCursor {
                 // If we found a new theme match, update the token's formatting based on it.
                 if (themeMatches.length > 0) {
                     newToken.color = themeMatches[themeMatches.length - 1].settings.foreground
-                    newToken.fontStyle = themeMatches[themeMatches.length - 1].settings.fontStyle
+                    newToken.fontStyle = this.getFontStyle(themeMatches[themeMatches.length - 1].settings.fontStyle)
                     if (!newToken.fontStyle)
                         newToken.fontStyle = 0
                 }
@@ -545,11 +572,11 @@ class SemanticContext {
 }
 
 export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistrationResolved) {
-    var ctx: SemanticContext = new SemanticContext
-    var newType: string = ''
-    var semanticTokens: ThemedToken[][] = []
+    const ctx: SemanticContext = new SemanticContext
+    let newType: string = ''
+    const semanticTokens: ThemedToken[][] = []
     for (const token of tokens) {
-        var semanticParsedTokens: ThemedToken[] = []
+        const semanticParsedTokens: ThemedToken[] = []
         for (const parsed of token) {
             const subtokens = getExplainedSubtokens(parsed)
             if (!subtokens) {
@@ -557,7 +584,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                 semanticParsedTokens.push(parsed)
                 continue
             }
-            var cursor: ParsedTokenCursor = new ParsedTokenCursor(parsed, subtokens, _theme)
+            const cursor: ParsedTokenCursor = new ParsedTokenCursor(parsed, subtokens, _theme)
             for (; cursor.subtokensRemaining(); cursor.advance()) {
                 const subtoken = cursor.current()
                 const scopes = subtoken["scopes"]
@@ -886,7 +913,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                     } else if (matchesAny(['meta.body.function', 'meta.body.struct', 'meta.tail.struct', 'meta.body.class', 'meta.body.union', 'meta.tail.union', 'meta.block', 'meta.parens', 'source'], scopes.slice(-1))) {
                         // Process this variable definition.
                         // Split at any ':' or '[' characters to get the variable name itself.
-                        var splitIndex = -1
+                        let splitIndex = -1
                         if (matchesAny(['meta.body.struct', 'meta.body.class', 'meta.body.union', 'meta.block'], scopes.slice(-1))) {
                             splitIndex = subtoken.content.indexOf(':')
                             if (splitIndex > 0) {
