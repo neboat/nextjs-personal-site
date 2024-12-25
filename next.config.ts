@@ -2,6 +2,17 @@ import type { NextConfig } from "next";
 import createMDX from '@next/mdx'
 
 const nextConfig: NextConfig = {
+  output: 'export',
+
+  // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
+  // trailingSlash: true,
+
+  // Optional: Prevent automatic `/me` -> `/me/`, instead preserve `href`
+  // skipTrailingSlashRedirect: true,
+
+  // Optional: Change the output directory `out` -> `dist`
+  // distDir: 'dist',
+
   // Configure `pageExtensions` to include markdown and MDX files
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   /* config options here */
@@ -22,6 +33,11 @@ const nextConfig: NextConfig = {
     });
 
     return config;
+  },
+  //images: { unoptimized: true },
+  images: {
+    loader: 'custom',
+    loaderFile: './custom-image-loader.ts',
   },
 };
 
