@@ -20,7 +20,8 @@ export const metadata: Metadata = {
     },
     openGraph: {
         type: 'website'
-    }
+    },
+    referrer: 'origin-when-cross-origin',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
