@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import createMDX from '@next/mdx'
+import rehypeSlug from "rehype-slug";
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -43,6 +44,11 @@ const nextConfig: NextConfig = {
 
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
+  options: {
+    remarkPlugins: [],
+    // rehypePlugins: [['rehype-slug', {}]],  // For use with --turbo
+    rehypePlugins: [[rehypeSlug, {}]]
+  }
 })
 
 export default withMDX(nextConfig);
