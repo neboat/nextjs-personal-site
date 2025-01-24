@@ -7,36 +7,37 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "publish": "rsync -avh --exclude .htaccess.mit out/ neboat@athena.dialup.mit.edu:~/www --delete"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
-    "@next/mdx": "15.1.4",
-    "@next/third-parties": "15.1.4",
+    "@next/mdx": "15.1.6",
+    "@next/third-parties": "15.1.6",
     "@types/mdx": "^2.0.13",
     "citation-js": "^0.7.16",
-    "next": "15.1.4",
+    "next": "15.1.6",
     "raw-loader": "^4.0.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "rehype-slug": "^6.0.0",
-    "shiki": "^1.24.0"
+    "shiki": "^2.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
-    "@types/react": "19.0.4",
-    "@types/react-dom": "19.0.2",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
     "eslint": "^8",
-    "eslint-config-next": "15.1.4",
+    "eslint-config-next": "15.1.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.0"
   },
   "overrides": {
-    "@types/react": "19.0.4",
-    "@types/react-dom": "19.0.2"
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3"
   }
 }
