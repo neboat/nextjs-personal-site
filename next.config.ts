@@ -16,15 +16,17 @@ const nextConfig: NextConfig = {
 
   // Configure `pageExtensions` to include markdown and MDX files
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-  /* config options here */
   experimental: {
-    turbo: {
-      rules: {
-        '*.bib': {
-          loaders: ['raw-loader'],
-          as: '*.js',
-        }
-      },
+    mdxRs: false
+  },
+  /* config options here */
+  turbopack: {
+    resolveExtensions: ['.js', '.jsx', '.md', '.mdx', '.ts', '.tsx'],
+    rules: {
+      '*.bib': {
+        loaders: ['raw-loader'],
+        as: '*.js',
+      }
     },
   },
   webpack: (config, { isServer }) => {
@@ -46,7 +48,7 @@ const withMDX = createMDX({
   // Add markdown plugins here, as desired
   options: {
     remarkPlugins: [],
-    // rehypePlugins: [['rehype-slug', {}]],  // For use with --turbo
+    // rehypePlugins: [['rehype-slug', {}]],  // For use with --turbopack
     rehypePlugins: [[rehypeSlug, {}]]
   }
 })

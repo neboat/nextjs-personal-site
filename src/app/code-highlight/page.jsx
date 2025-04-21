@@ -10,7 +10,7 @@ export const metadata = {
 
 const CodeHighlightPage = () => {
     return (
-        <Layout lastModified={getLastModified('/src/app/code-highlight/page.jsx')} mainClassName="w-full mb-4" articleClassName="!max-w-full">
+        <Layout lastModified={getLastModified('/src/app/code-highlight/page.jsx')} mainClassName="w-full mb-4" articleClassName="max-w-full!">
             <h1>Code Highlighter</h1>
             <CodeInputOutput />
             <Description />

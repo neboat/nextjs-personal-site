@@ -43,7 +43,7 @@ const Layout = (
         {` `}
         &middot; Last modified {formatDate(lastModified)}
         {` `}
-        &middot; <a href="http://accessibility.mit.edu/">Accessibility</a>
+        &middot; <a className="underline" href="http://accessibility.mit.edu/">Accessibility</a>
       </footer>
     </div>
   )

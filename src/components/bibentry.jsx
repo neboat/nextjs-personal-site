@@ -2,7 +2,8 @@
 
 import * as React from "react"
 import Cite from "citation-js"
-import { formatHowPublished, formatURL } from "./bibfmt";
+import { formatHowPublished, formatURL } from "./bibfmt"
+import { copyIcon, copiedIcon } from "./copybtn"
 
 const copyToClipboard = str => {
     if (navigator.clipboard) {
@@ -43,7 +44,7 @@ const BibEntry = ({ id, authors, year, title, howPublished, available, annote, b
     const [isCopied, setIsCopied] = React.useState(false)
     return (
         <div key={id} className='m-1'>
-            <div className={'border border-l-2 bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-600 rounded px-4 py-2 ' + classExtra} {...props}>
+            <div className={'border border-l-2 bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-600 rounded-xs px-4 py-2 ' + classExtra} {...props}>
                 {authors.map(a => {
                     return `${a.given} ${a.family}`
                 }).join(', ')}.{' '}
@@ -60,7 +61,7 @@ const BibEntry = ({ id, authors, year, title, howPublished, available, annote, b
                             setIsCopied(true)
                             setTimeout(() => setIsCopied(false), 1000)
                         }}>
-                        {isCopied ? "BibTeX copied" : "Copy BibTeX"}
+                        <span className="align-baseline">{isCopied ? copiedIcon : copyIcon} Copy BibTeX</span>
                     </button></div>
             </div>
         </div>

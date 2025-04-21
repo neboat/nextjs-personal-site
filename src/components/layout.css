@@ -1,7 +1,24 @@
+@import 'tailwindcss';
+
 @config "../../tailwind.config.ts";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 :root {
   --border-radius: 4px;
@@ -46,16 +63,6 @@ body {
   font-family: var(--font-sans);
   font-weight: normal;
   margin: 0;
-  word-wrap: break-word;
-}
-a {
-  background-color: transparent;
-  /* color: var(--color-primary); */
-  text-decoration: none;
-  /* font-weight: 500; */
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 2px;
 }
 a:active,
 a:hover {
@@ -91,7 +98,7 @@ img {
 }
 code,
 kbd,
-pre,
+/* pre, */
 samp {
   font-family: var(--font-mono);
   font-size: 1em;
@@ -122,18 +129,14 @@ hgroup,
 img,
 figure,
 fieldset,
-ul,
-ol,
 dl,
-dd,
-p {
+dd {
   margin: 0;
   padding: 0;
   margin-bottom: var(--space-4);
 }
 ul,
 ol {
-  /*margin-left: var(--space-4);*/
   list-style-position: outside;
   list-style-image: none;
 }
@@ -142,14 +145,10 @@ pre {
   margin-right: 0;
   margin-top: 0;
   margin-bottom: 0;
-  /* margin-bottom: var(--space-4); */
-  font-size: 0.875rem;
-  line-height: var(--line-height-normal);
   background: hsla(0, 0%, 0%, 0.04);
   border-radius: var(--border-radius);
   overflow: auto;
   word-wrap: normal;
-  padding: var(--space-4);
 }
 b,
 strong,
@@ -182,9 +181,6 @@ p *:last-child {
 li > p {
   margin-bottom: calc(var(--space-4) / 2);
 }
-/* p {
-  max-width: 680px;
-} */
 code {
   font-size: 0.875rem;
 }
@@ -204,9 +200,7 @@ acronym {
 }
 tt,
 code {
-  /* background-color: var(--color-code-bg); */
   border-radius: var(--border-radius);
-  color: var(--color-code);
   font-family: var(--font-mono);
   padding-bottom: 0.25em;
   padding-top: 0.25em;
@@ -229,6 +223,10 @@ pre tt:after {
   content: none;
 }
 
+[role=button], button {
+  cursor: pointer;
+}
+
 /* Simple CSS to add line numbers to code. */
 code {
   counter-reset: step;
@@ -242,8 +240,7 @@ code .line::before {
   margin-right: 1.5rem;
   display: inline-block;
   text-align: right;
-  color: theme('colors.slate[300]');
-  /* color: rgba(115, 138, 148, 0.4); */
+  color: var(--color-slate-300);
 }
 
 #alert p {

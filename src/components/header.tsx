@@ -8,8 +8,8 @@ const NavLink = ({ children, url, currentPath, ...props }: { children: React.Rea
   <Link href={url}
     {...props}
     className={currentPath === url
-      ? 'inline-block py-2 px-3 border-b-2 border-b-rose-700 dark:border-b-rose-500 hover:border-b-rose-700 hover:dark:border-b-rose-500'
-      : 'inline-block py-2 px-3 border-b-2 border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 hover:dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+      ? 'inline-block py-2 px-3 border-b-2 border-b-rose-700 dark:border-b-rose-500 hover:border-b-rose-700 dark:hover:border-b-rose-500'
+      : 'inline-block py-2 px-3 border-b-2 border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700'
     }
   >{children}</Link>
 )
@@ -65,9 +65,9 @@ export const Header = () => {
         <input className="hidden peer" type="checkbox" name="menu-button" id="menu-button" />
         <label className="block relative py-2 md:hidden ml-3" htmlFor="menu-button">
           <div className="py-2 mt-1 mb-1" aria-label="Menu">
-            <span className="block relative w-5 h-0.5 bg-zinc-600 dark:bg-zinc-300 group-has-[:checked]:bg-transparent
-        before:bg-zinc-600 dark:before:bg-zinc-300 before:content-[''] before:block before:absolute before:w-full before:h-full before:top-1.5 group-has-[:checked]:before:-rotate-45 group-has-[:checked]:before:top-0
-        after:bg-zinc-600 dark:after:bg-zinc-300 after:content-[''] after:block after:absolute after:w-full after:h-full after:-top-1.5 group-has-[:checked]:after:rotate-45 group-has-[:checked]:after:top-0"></span>
+            <span className="block relative w-5 h-0.5 bg-zinc-600 dark:bg-zinc-300 group-has-checked:bg-transparent
+        before:bg-zinc-600 dark:before:bg-zinc-300 before:content-[''] before:block before:absolute before:w-full before:h-full before:top-1.5 group-has-checked:before:-rotate-45 group-has-checked:before:top-0
+        after:bg-zinc-600 dark:after:bg-zinc-300 after:content-[''] after:block after:absolute after:w-full after:h-full after:-top-1.5 group-has-checked:after:rotate-45 group-has-checked:after:top-0"></span>
           </div>
         </label>
         <nav className="md:hidden max-h-0 overflow-hidden peer-checked:max-h-full" style={{ transition: "max-height .2s ease-out" }}>
@@ -78,7 +78,7 @@ export const Header = () => {
           </ul>
         </nav>
       </div>
-      <button className="ml-auto mr-3 self-start py-2 border-b-2 border-b-transparent" onClick={() => setIsDark(isDark === "dark" ? "light" : "dark")}>
+      <button className="ml-auto mr-3 self-start py-2 border-b-2 border-b-transparent hover:bg-zinc-200 dark:hover:bg-zinc-700" onClick={() => setIsDark(isDark === "dark" ? "light" : "dark")}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="hidden dark:block size-6 text-zinc-300" aria-label="Toggle dark mode">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
         </svg>
