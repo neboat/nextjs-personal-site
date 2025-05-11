@@ -682,7 +682,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                 }
 
                 if (ctx.scopeIsAnyOf(['source', 'block', 'structure', 'template'])) {
-                    if (matchesAny(['meta.function.definition'], scopes) && !matchesAny(['meta.function.definition.body'], scopes)) {
+                    if (matchesAny(['meta.function.definition'], scopes) && !matchesAny(['meta.function.definition.body', 'meta.body.function.definition'], scopes)) {
                         // Enter a function.head scope.
                         ctx.pushScope('function.head')
                     } else if (matchesAny(['punctuation.definition.capture.begin.lambda'], scopes)) {
@@ -847,6 +847,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         ctx.pushScope('parens')
                     } else if (matchesAny(['punctuation.section.angle-brackets.begin.template.call'], scopes)) {
                         // Enter template.spec scope to handle this template call.
+                        ctx.pushScope('vardef')
                         ctx.pushScope('template.spec')
                     } else if (matchesAny(['keyword.operator.cast'], scopes)) {
                         // Enter cast scope to handle this cast operation.

@@ -1185,6 +1185,107 @@ void vecsum(double *Y, const double *X, int n) {
 
             { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
         ]
+    },
+    {
+        langs: ['cilkcpp'],
+        code: `
+void hyrax_round() {
+    std::vector<std::vector<Scalar>> As, Bs, Cs;
+}`,
+        expected: [
+            { content: 'void', scopeName: ['^storage\.type\.built-in\.primitive'] },
+            { content: 'hyrax_round', scopeName: ['^entity\.name\.function\.definition'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parameters\.begin\.bracket\.round'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parameters\.end\.bracket\.round'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'vector', scopeName: ['^entity\.name\.type'] },
+            { content: '<', scopeName: ['^punctuation\.section\.angle-brackets\.begin\.template\.call'] },
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'vector', scopeName: ['^entity\.name\.type'] },
+            { content: '<', scopeName: ['^punctuation\.section\.angle-brackets\.begin\.template\.call'] },
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: '>', scopeName: ['^punctuation\.section\.angle-brackets\.end\.template\.call'] },
+            { content: '>', scopeName: ['^punctuation\.section\.angle-brackets\.end\.template\.call'] },
+            { content: 'As', scopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'], notScopeName: ['^variable\.other\.declare'] },
+            { content: 'Bs', scopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'], notScopeName: ['^variable\.other\.declare'] },
+            { content: 'Cs', scopeName: ['^variable\.other\.declare'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+        ]
+    },
+    {
+        langs: ['cilkcpp'],
+        code: `
+void foo() {
+  std::set<int> mySet = {1, 2, 3, 4, 5};
+
+  // for-range loop
+  for (const auto& element : mySet) {
+    std::cout << element << ", ";
+  }
+}`,
+        expected: [
+            { content: 'void', scopeName: ['^storage\.type\.built-in\.primitive'] },
+            { content: 'foo', scopeName: ['^entity\.name\.function\.definition'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parameters\.begin\.bracket\.round'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parameters\.end\.bracket\.round'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'set', scopeName: ['^entity\.name\.type'] },
+            { content: '<', scopeName: ['^punctuation\.section\.angle-brackets\.begin\.template\.call'] },
+            { content: 'int', scopeName: ['^storage\.type\.built-in\.primitive'] },
+            { content: '>', scopeName: ['^punctuation\.section\.angle-brackets\.end\.template\.call'] },
+            { content: 'mySet', scopeName: ['^variable\.other\.declare'] },
+            { content: '=', scopeName: ['^keyword\.operator\.assignment', '^meta\.tail\.union'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '1', scopeName: ['^constant\.numeric\.decimal'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter\.comma'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '2', scopeName: ['^constant\.numeric\.decimal'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter\.comma'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '3', scopeName: ['^constant\.numeric\.decimal'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter\.comma'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '4', scopeName: ['^constant\.numeric\.decimal'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter\.comma'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '5', scopeName: ['^constant\.numeric\.decimal'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'], notScopeName: ['^variable\.other\.declare'] },
+
+            { content: '//', scopeName: ['^comment\.line\.double-slash'] },
+            { content: 'for-range loop', scopeName: ['^comment\.line\.double-slash'] },
+
+            { content: 'for', scopeName: ['^keyword\.control'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parens\.begin\.bracket\.round'] },
+            { content: 'const', scopeName: ['^storage\.modifier'] },
+            { content: 'auto', scopeName: ['^storage\.type\.built-in\.primitive'] },
+            { content: '&', scopeName: ['^storage\.modifier\.reference'] },
+            { content: 'element', scopeName: ['^variable\.other\.declare'] },
+            { content: ':', scopeName: ['^punctuation\.separator\.colon\.range-based'] },
+            { content: 'mySet', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parens\.end\.bracket\.round'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'cout', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type'] },
+            { content: '<<', scopeName: ['^keyword\.operator'] },
+            { content: 'element', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '<<', scopeName: ['^keyword\.operator'] },
+            { content: '"', scopeName: ['^punctuation\.definition\.string\.begin'] },
+            { content: ',', scopeName: ['^string\.quoted\.double'] },
+            { content: '"', scopeName: ['^punctuation\.definition\.string\.end'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'], notScopeName: ['^variable\.other\.declare'] },
+
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+        ]
     }
 ])('SemanticHighlight($langs, $code)', async ({ code, langs, expected }) => {
     for (const lang of langs) {
