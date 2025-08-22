@@ -3,9 +3,10 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
+import type { Route } from "next"
 
 const NavLink = ({ children, url, currentPath, ...props }: { children: React.ReactNode, url: string, currentPath: string }) => (
-  <Link href={url}
+  <Link href={url as Route}
     {...props}
     className={currentPath === url
       ? 'inline-block py-2 px-3 border-b-2 border-b-rose-700 dark:border-b-rose-500 hover:border-b-rose-700 dark:hover:border-b-rose-500'

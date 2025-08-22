@@ -42,14 +42,16 @@ const nextConfig: NextConfig = {
     loader: 'custom',
     loaderFile: './custom-image-loader.ts',
   },
+  typedRoutes: true,
 };
 
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
   options: {
     remarkPlugins: [],
-    // rehypePlugins: [['rehype-slug', {}]],  // For use with --turbopack
-    rehypePlugins: [[rehypeSlug, {}]]
+    // @ts-ignore wrong types
+    rehypePlugins: [['rehype-slug', {}]],  // For use with --turbopack
+    // rehypePlugins: [[rehypeSlug, {}]]
   }
 })
 

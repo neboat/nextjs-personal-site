@@ -1,5 +1,6 @@
 import * as React from "react"
 import InternalLink from "next/link"
+import type { Route } from "next"
 
 const utmParameters = `` // `?utm_source=neboat-personal-site`
 
@@ -16,7 +17,7 @@ const Link = ({ children, href, ...other }: { children: React.ReactNode, href: s
     if (internal) {
         return (
             <InternalLink
-                href={href}
+                href={href as Route}
                 {...other}
             >
                 {children}

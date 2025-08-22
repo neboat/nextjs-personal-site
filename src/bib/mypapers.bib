@@ -1,3 +1,21 @@
+@inproceedings{HandlemanSiSc25,
+  author       = {Handleman, Aaron and Singer, Kyle and Schardl, Tao B. and Lee, I-Ting Angelina},
+  title        = {Towards Zero Spawn Overhead: Work Stealing Without Deques},
+  year         = {2025},
+  isbn         = {9798400712586},
+  publisher    = {Association for Computing Machinery},
+  address      = {New York, NY, USA},
+  url          = {https://doi.org/10.1145/3694906.3743349},
+  doi          = {10.1145/3694906.3743349},
+  abstract     = {In a randomized work-stealing scheduler, parallel speedup depends on the spawn overhead, which workers pay to allow tasks to execute in parallel, and the steal overhead, which thieves pay to start executing new work. The importance of minimizing the spawn overhead in a randomized work-stealing scheduler is first formalized by Frigo et al., coined as the work-first principle [15], which states that one should minimize spawn overhead even at the expense of a larger steal overhead. Since then, many strategies have been proposed to reduce the spawn overhead, which is dominated by maintaining a per-worker double-ended queue, or deque, to keep track of available parallel work.In pursuit of zero spawn overhead, this work considers a strategy that eliminates the use of deques entirely, obviating the need for a worker to perform explicit bookkeeping or set up a deque to enable parallelism. To that end, we propose DLite, a compiler and runtime ABI (Application Binary Interface) that incurs near-zero spawn overhead, empirically measured to be about 6\% compared to a regular function invocation. DLite pushes the tradeoffs advocated by the work-first principle to the extreme, which decreases the spawn overhead to almost nil, at the expense of a high steal cost. Specifically, DLite employs a backtracking strategy: When a steal attempt occurs, the victim provides its current stack and base pointers to the thief, and the thief then reconstructs the necessary state to realize the parallel execution.We have implemented Cilk-DLite, which extends the OpenCilk platform [33] to implement DLite. When the application has ample parallelism, Cilk-DLite exhibits similar scalability to OpenCilk with much lower spawn overhead. When the application lacks parallelism, the high steal cost in Cilk-DLite can impede scalability due to slower work distribution. We also implemented variants of Cilk-DLite that make different design choices to evaluate the tradeoffs between spawn overhead and steal cost.},
+  optbooktitle = {Proceedings of the 37th ACM Symposium on Parallelism in Algorithms and Architectures},
+  booktitle    = {SPAA},
+  pages        = {75–88},
+  numpages     = {14},
+  location     = {Portland, OR, USA},
+  series       = {SPAA '25}
+}
+
 @inproceedings{KalerChWh24,
   author       = {Tim Kaler and
                   Xuhao Chen and
@@ -8,13 +26,13 @@
                   Charles E. Leiserson},
   title        = {Speedcode: Software Performance Engineering Education via the Coding
                   of Didactic Exercises},
-  optbooktitle    = {{IEEE} International Parallel and Distributed Processing Symposium,
+  optbooktitle = {{IEEE} International Parallel and Distributed Processing Symposium,
                   {IPDPS} 2024 - Workshop, San Francisco, CA, USA, May 27-31, 2024},
   booktitle    = {EduPar},
   pages        = {391--394},
   publisher    = {{IEEE}},
   year         = {2024},
-  opturl          = {https://doi.org/10.1109/IPDPSW63119.2024.00087},
+  opturl       = {https://doi.org/10.1109/IPDPSW63119.2024.00087},
   doi          = {10.1109/IPDPSW63119.2024.00087},
   timestamp    = {Fri, 09 Aug 2024 10:37:41 +0200},
   biburl       = {https://dblp.org/rec/conf/ipps/KalerCWCHSL24.bib},
