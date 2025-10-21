@@ -1286,7 +1286,275 @@ void foo() {
             { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
             { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
         ]
+    },
+    {
+        langs: ['cilkcpp'],
+        code: `
+std::vector<FiniteField> compute_hash(QuadraticHash &hash, std::span<const FiniteField> x) {
+    std::vector<FiniteField> ret(x.size());
+    cilk_for (size_t i = 0; i < x.size(); i++)
+        ret[i] = hash(x[i]);
+}`,
+        expected: [
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'vector', scopeName: ['^entity\.name\.type'] },
+            { content: '<', scopeName: ['^punctuation\.section\.angle-brackets\.begin\.template\.call'] },
+            { content: 'FiniteField', scopeName: ['^entity\.name\.type'] },
+            { content: '>', scopeName: ['^punctuation\.section\.angle-brackets\.end\.template\.call'] },
+            { content: 'compute_hash', scopeName: ['^entity\.name\.function\.definition'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parameters\.begin\.bracket\.round'] },
+            { content: 'QuadraticHash', scopeName: ['^entity\.name\.type'] },
+            { content: '&', scopeName: ['^storage\.modifier\.reference'] },
+            { content: 'hash', scopeName: ['^variable\.parameter'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'] },
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'span', scopeName: ['^entity\.name\.type'] },
+            { content: '<', scopeName: ['^punctuation\.section\.angle-brackets\.begin\.template\.call'] },
+            { content: 'const', scopeName: ['^storage\.modifier'] },
+            { content: 'FiniteField', scopeName: ['^entity\.name\.type'] },
+            { content: '>', scopeName: ['^punctuation\.section\.angle-brackets\.end\.template\.call'] },
+            { content: 'x', scopeName: ['^variable\.parameter'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parameters\.end\.bracket\.round'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'std', scopeName: ['^entity\.name\.scope-resolution'] },
+            { content: '::', scopeName: ['^punctuation\.separator\.scope-resolution'] },
+            { content: 'vector', scopeName: ['^entity\.name\.type'] },
+            { content: '<', scopeName: ['^punctuation\.section\.angle-brackets\.begin\.template\.call'] },
+            { content: 'FiniteField', scopeName: ['^entity\.name\.type'] },
+            { content: '>', scopeName: ['^punctuation\.section\.angle-brackets\.end\.template\.call'] },
+            { content: 'ret', scopeName: ['^variable\.other\.declare'] },
+            { content: '(', scopeName: ['^punctuation\.section\.arguments\.begin\.bracket\.round\.function\.call'] },
+            { content: 'x', scopeName: ['^variable\.other\.object\.access'] },
+            { content: '.', scopeName: ['^punctuation\.separator\.dot-access'] },
+            { content: 'size', scopeName: ['^entity\.name\.function\.member'] },
+            { content: '(', scopeName: ['^punctuation\.section\.arguments\.begin\.bracket\.round\.function\.member'] },
+            { content: ')', scopeName: ['^punctuation\.section\.arguments\.end\.bracket\.round\.function\.member'] },
+            { content: ')', scopeName: ['^punctuation\.section\.arguments\.end\.bracket\.round\.function\.call'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+            { content: 'cilk_for', scopeName: ['^keyword\.control\.cilk_for'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parens\.begin\.bracket\.round'] },
+            { content: 'size_t', scopeName: ['^storage\.type\.built-in'] },
+            { content: 'i', scopeName: ['^variable\.other\.declare'] },
+            { content: '=', scopeName: ['^keyword\.operator\.assignment'] },
+            { content: '0', scopeName: ['^constant\.numeric\.decimal'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+            { content: 'i', scopeName: ['^meta\.parens'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '<', scopeName: ['^keyword\.operator\.comparison'] },
+            { content: 'x', scopeName: ['^variable\.other\.object\.access'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '.', scopeName: ['^punctuation\.separator\.dot-access'] },
+            { content: 'size', scopeName: ['^entity\.name\.function\.member'] },
+            { content: '(', scopeName: ['^punctuation\.section\.arguments\.begin\.bracket\.round\.function\.member'] },
+            { content: ')', scopeName: ['^punctuation\.section\.arguments\.end\.bracket\.round\.function\.member'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+            { content: 'i', scopeName: ['^meta\.parens'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '++', scopeName: ['^keyword\.operator\.increment'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parens\.end\.bracket\.round'] },
+
+            { content: 'ret', scopeName: ['^variable'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '[', scopeName: ['^punctuation\.definition\.begin\.bracket\.square'] },
+            { content: 'i', scopeName: ['^meta\.bracket'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ']', scopeName: ['^punctuation\.definition\.end\.bracket\.square'] },
+            { content: '=', scopeName: ['^keyword\.operator\.assignment'] },
+            { content: 'hash', scopeName: ['^entity\.name\.function\.call'] },
+            { content: '(', scopeName: ['^punctuation\.section\.arguments\.begin\.bracket\.round\.function\.call'] },
+            { content: 'x', scopeName: ['^variable'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '[', scopeName: ['^punctuation\.definition\.begin\.bracket\.square'] },
+            { content: 'i', scopeName: ['^meta\.bracket'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ']', scopeName: ['^punctuation\.definition\.end\.bracket\.square'] },
+            { content: ')', scopeName: ['^punctuation\.section\.arguments\.end\.bracket\.round\.function\.call'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+        ]
+    },
+    {
+        langs: ['cilkcpp'],
+        code:
+            `
+struct QuadraticHash {
+    FiniteField a, b, c;
+    FiniteField operator()(const FiniteField &x) const {
+        return c + x * (b + a * x);
     }
+};
+`,
+        expected: [
+            { content: 'struct', scopeName: ['^storage\.type\.struct'] },
+            { content: 'QuadraticHash', scopeName: ['^entity\.name\.type'] },
+
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'FiniteField', scopeName: ['^entity\.name\.type'] },
+            { content: 'a', scopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'], notScopeName: ['^variable\.other\.declare'] },
+            { content: 'b', scopeName: ['^variable\.other\.declare'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'], notScopeName: ['^variable\.other\.declare'] },
+            { content: 'c', scopeName: ['^variable\.other\.declare'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'], notScopeName: ['^variable\.other\.declare'] },
+
+            { content: 'FiniteField', scopeName: ['^entity\.name\.type'] },
+            { content: 'operator', scopeName: ['^keyword\.other\.operator\.overload'] },
+            { content: '()', scopeName: ['^entity\.name\.operator'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parameters\.begin\.bracket\.round'] },
+            { content: 'const', scopeName: ['^storage\.modifier'] },
+            { content: 'FiniteField', scopeName: ['^entity\.name\.type'] },
+            { content: '&', scopeName: ['^storage\.modifier\.reference'] },
+            { content: 'x', scopeName: ['^variable\.parameter'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parameters\.end\.bracket\.round'] },
+            { content: 'const', scopeName: ['^storage\.modifier\.specifier\.functional\.post-parameters'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'return', scopeName: ['^keyword\.control\.return'] },
+            { content: 'c', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: '+', scopeName: ['^keyword\.operator\.arithmetic'] },
+            { content: 'x', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: '*', scopeName: ['^keyword\.operator\.arithmetic'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parens\.begin\.bracket\.round'] },
+            { content: 'b', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: '+', scopeName: ['^keyword\.operator\.arithmetic'] },
+            { content: 'a', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: '*', scopeName: ['^keyword\.operator\.arithmetic'] },
+            { content: 'x', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parens\.end\.bracket\.round'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+        ]
+    },
+    {
+        langs: ['cilkcpp'],
+        code: `class Scalar { /* modular (big) integer */ };`,
+        expected: [
+            { content: 'class', scopeName: ['^storage\.type\.class'] },
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+            { content: '/*', scopeName: ['^punctuation\.definition\.comment\.begin'] },
+            { content: 'modular (big) integer', scopeName: ['^comment\.block'] },
+            { content: '*/', scopeName: ['^punctuation\.definition\.comment\.end'] },
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'], notScopeName: ['^entity\.name\.type'] },
+        ]
+    },
+    {
+        langs: ['cilkcpp'],
+        code: `
+Scalar sum_product(const Scalar *A, const Scalar *B,
+                   const Scalar *C, size_t N) {
+    Scalar cilk_reducer(id_fn, reducer_fn) sum = 0;
+    [[tapir::target("gpu")]] /* GPU offloading */
+    cilk_for (size_t i = 0; i < N; i++) {
+        Scalar product = A[i] * B[i] * C[i];
+        sum += product;
+    }
+    return sum;
+}`,
+        expected: [
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: 'sum_product', scopeName: ['^entity\.name\.function\.definition'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parameters\.begin\.bracket\.round'] },
+            { content: 'const', scopeName: ['^storage\.modifier'] },
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: '*', scopeName: ['^storage\.modifier\.pointer'] },
+            { content: 'A', scopeName: ['^variable\.parameter'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'] },
+            { content: 'const', scopeName: ['^storage\.modifier'] },
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: '*', scopeName: ['^storage\.modifier\.pointer'] },
+            { content: 'B', scopeName: ['^variable\.parameter'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'] },
+            { content: 'const', scopeName: ['^storage\.modifier'] },
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: '*', scopeName: ['^storage\.modifier\.pointer'] },
+            { content: 'C', scopeName: ['^variable\.parameter'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter'] },
+            { content: 'size_t', scopeName: ['^storage\.type\.built-in'] },
+            { content: 'N', scopeName: ['^variable\.parameter'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parameters\.end\.bracket\.round'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: 'cilk_reducer', scopeName: ['^storage\.modifier\.specifier\.cilk_reducer'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parens\.begin\.bracket\.round'] },
+            { content: 'id_fn', scopeName: ['^meta\.parens'] },
+            { content: ',', scopeName: ['^punctuation\.separator\.delimiter\.comma'] },
+            { content: 'reducer_fn', scopeName: ['^meta\.parens'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parens\.end\.bracket\.round'] },
+            { content: 'sum', scopeName: ['^variable\.other\.declare'] },
+            { content: '=', scopeName: ['^keyword\.operator\.assignment'] },
+            { content: '0', scopeName: ['^constant\.numeric\.decimal'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+            { content: '[[', scopeName: ['^punctuation\.section\.attribute\.begin'] },
+            { content: 'tapir', scopeName: ['^entity\.name\.namespace'] },
+            { content: ':', scopeName: ['^punctuation\.accessor\.attribute'] },
+            { content: ':', scopeName: ['^punctuation\.accessor\.attribute'] },
+            { content: 'target', scopeName: ['^entity\.other\.attribute'] },
+            { content: '(', scopeName: ['^support\.other\.attribute'] },
+            { content: '"', scopeName: ['^punctuation\.definition\.string\.begin'] },
+            { content: 'gpu', scopeName: ['^string\.quoted\.double'] },
+            { content: '"', scopeName: ['^punctuation\.definition\.string\.end'] },
+            { content: ')', scopeName: ['^support\.other\.attribute'] },
+            { content: ']]', scopeName: ['^punctuation\.section\.attribute\.end'] },
+            { content: '/*', scopeName: ['^punctuation\.definition\.comment\.begin'] },
+            { content: 'GPU offloading', scopeName: ['^comment\.block'] },
+            { content: '*/', scopeName: ['^punctuation\.definition\.comment\.end'] },
+
+            { content: 'cilk_for', scopeName: ['^keyword\.control\.cilk_for'] },
+            { content: '(', scopeName: ['^punctuation\.section\.parens\.begin\.bracket\.round'] },
+            { content: 'size_t', scopeName: ['^storage\.type\.built-in'] },
+            { content: 'i', scopeName: ['^variable\.other\.declare'] },
+            { content: '=', scopeName: ['^keyword\.operator\.assignment'] },
+            { content: '0', scopeName: ['^constant\.numeric\.decimal'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+            { content: 'i', scopeName: ['^meta\.parens'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '<', scopeName: ['^keyword\.operator\.comparison'] },
+            { content: 'N', scopeName: ['^variable\.other'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+            { content: 'i', scopeName: ['^meta\.parens'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '++', scopeName: ['^keyword\.operator\.increment'] },
+            { content: ')', scopeName: ['^punctuation\.section\.parens\.end\.bracket\.round'] },
+            { content: '{', scopeName: ['^punctuation\.section\.block\.begin\.bracket\.curly'] },
+
+            { content: 'Scalar', scopeName: ['^entity\.name\.type'] },
+            { content: 'product', scopeName: ['^variable\.other\.declare'] },
+            { content: '=', scopeName: ['^keyword\.operator\.assignment'] },
+            { content: 'A', scopeName: ['^variable'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '[', scopeName: ['^punctuation\.definition\.begin\.bracket\.square'] },
+            { content: 'i', scopeName: ['^meta\.bracket'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ']', scopeName: ['^punctuation\.definition\.end\.bracket\.square'] },
+            { content: '*', scopeName: ['^keyword\.operator\.arithmetic'] },
+            { content: 'B', scopeName: ['^variable'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '[', scopeName: ['^punctuation\.definition\.begin\.bracket\.square'] },
+            { content: 'i', scopeName: ['^meta\.bracket'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ']', scopeName: ['^punctuation\.definition\.end\.bracket\.square'] },
+            { content: '*', scopeName: ['^keyword\.operator\.arithmetic'] },
+            { content: 'C', scopeName: ['^variable'], notScopeName: ['^variable\.other\.declare'] },
+            { content: '[', scopeName: ['^punctuation\.definition\.begin\.bracket\.square'] },
+            { content: 'i', scopeName: ['^meta\.bracket'], notScopeName: ['^variable\.other\.declare'] },
+            { content: ']', scopeName: ['^punctuation\.definition\.end\.bracket\.square'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+            { content: 'sum', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: '+=', scopeName: ['^keyword\.operator\.assignment\.compound'] },
+            { content: 'product', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+
+            { content: 'return', scopeName: ['^keyword\.control\.return'] },
+            { content: 'sum', scopeName: ['^variable\.other\.unknown'], notScopeName: ['^entity\.name\.type', '^variable\.other\.declare'] },
+            { content: ';', scopeName: ['^punctuation\.terminator\.statement'] },
+
+            { content: '}', scopeName: ['^punctuation\.section\.block\.end\.bracket\.curly'] },
+        ]
+    }
+
 ])('SemanticHighlight($langs, $code)', async ({ code, langs, expected }) => {
     for (const lang of langs) {
         const semanticTokens = await TestHighlight(code, lang)

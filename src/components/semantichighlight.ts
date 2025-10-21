@@ -714,7 +714,13 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         ctx.pushScope('typedef')
                     } else if (matchesAny(['punctuation.section.block.begin.bracket.curly.struct', 'punctuation.section.block.begin.bracket.curly.class', 'punctuation.section.block.begin.bracket.curly.union'], scopes)) {
                         // Enter a structure scope to process the structure definition.
+                        ctx.pushScope('vardef')
                         ctx.pushScope('structure')
+                    } else if (matchesAny(['entity.name.type'], scopes)) {
+                        // Add this type to the set of learned types.
+                        ctx.learnType(subtoken.content)
+                        // Enter a vardef scope to process what comes after the type.
+                        ctx.pushScope('vardef')
                     } else if (matchesAny(['entity.name.type.alias', 'entity.name.type.class'], scopes)) {
                         // Add this type to the set of learned types.
                         ctx.learnType(subtoken.content)
@@ -838,7 +844,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                     } else if (matchesAny(['punctuation.definition.capture.begin.lambda'], scopes)) {
                         // Enter a function.head scope.
                         ctx.pushScope('function.head')
-                    } else if (matchesAny(['keyword.control.for'], scopes) ||
+                    } else if (matchesAny(['keyword.control.for', 'keyword.control.cilk_for'], scopes) ||
                         (matchesAny(['keyword.control'], scopes) && trimmed === 'for')) {
                         // Push a loop.ctl scope.
                         ctx.pushScope('loop')
@@ -862,12 +868,20 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         cursor.pushCurrentSubtoken({ name: 'entity.name.type.defined' })
                         // Enter vardef to process a possible variable definition.
                         ctx.pushScope('vardef')
+                    } else if (matchesAny(['entity.name.type'], scopes)) {
+                        // Enter vardef to process a possible variable definition.
+                        ctx.pushScope('vardef')
                     }
                     continue
                 }
 
                 if (ctx.scopeIs('vardef')) {
-                    if (matchesAny(['entity.name.function'], scopes)) {
+                    if (matchesAny(['entity.name.function.call.cpp'], scopes)) {
+                        // Constructor call.  Mark this variable name as a definition.
+                        cursor.pushCurrentSubtoken({ name: 'variable.other.declare' })
+                        ctx.pushScope('rhs')
+                        continue
+                    } else if (matchesAny(['entity.name.function'], scopes)) {
                         // The function name indicates this isn't a variable definition.
                         // Mark this subtoken as a function definition, and switch to a function.head scope.
                         cursor.pushCurrentSubtoken({ name: 'entity.name.function.definition' })
@@ -906,6 +920,9 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                     } else if (matchesAny(['punctuation.definition.begin.bracket.square'], scopes)) {
                         // Start of an array index.  Push an arrayidx scope to process it.
                         ctx.pushScope('arrayidx')
+                    } else if (matchesAny(['storage.modifier.specifier.cilk_reducer'], scopes)) {
+                        // Start of a Cilk reducer specification.
+                        ctx.pushScope('parens')
                     } else if (matchesAny(['variable.other.declare', 'variable.other.object', 'variable.other.unknown', 'variable.object', 'variable.other.assignment'], scopes.slice(-1))) {
                         // Mark this variable as a definition.
                         cursor.pushCurrentSubtoken({ name: 'variable.other.declare' })

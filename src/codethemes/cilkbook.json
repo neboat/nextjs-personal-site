@@ -412,7 +412,7 @@
     },
     {
       "name": "Function declarations",
-      "scope": ["entity.name.function.definition", "support.function", "support.constant.handlebars"],
+      "scope": ["entity.name.function.definition", "support.function", "support.constant.handlebars", "entity.name.operator"],
       "settings": {
         "foreground": "#0D00FF"
       }
