@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 import createMDX from '@next/mdx'
-import rehypeSlug from "rehype-slug";
+// import rehypeSlug from "rehype-slug";
 
+/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   output: 'export',
 
@@ -21,7 +22,6 @@ const nextConfig: NextConfig = {
   },
   /* config options here */
   turbopack: {
-    resolveExtensions: ['.js', '.jsx', '.md', '.mdx', '.ts', '.tsx'],
     rules: {
       '*.bib': {
         loaders: ['raw-loader'],

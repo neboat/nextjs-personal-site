@@ -26,11 +26,11 @@ const PapersPage = () => {
     return (
         <Layout lastModified={getLastModified(`/src/app/papers/page.jsx`)}>
             <h1>Papers</h1>
-            <AnchoredHeader level={2}>Featured papers</AnchoredHeader>
+            <AnchoredHeader level={2} id="featured-papers">Featured papers</AnchoredHeader>
             {MyPapers.data.filter(paper => featuredPapers.includes(paper["citation-key"])).map(paper => {
                 return <Bib key={'featured-' + paper.id} paper={paper} idprefix="featured-" annote={formatAnnotation(paper)} />
             })}
-            <AnchoredHeader level={2}>All papers</AnchoredHeader>
+            <AnchoredHeader level={2} id="all-papers">All papers</AnchoredHeader>
             {MyPapers.data.map(paper => {
                 return <Bib key={paper.id} paper={paper} annote={formatAnnotation(paper)} />
             })}

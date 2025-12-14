@@ -53,8 +53,13 @@ const checkTokenScopes = (
                     // compare the scopes.
                     const contentToMatch = ex.content.trim().length < tok.content.trim().length ? ex.content.trim() : tok.content.trim()
                     if (contentToMatch == expected[eIdx].content) {
+                        // Narrow expected[eIdx] so TypeScript knows it's defined.
+                        const expectedToken = expected[eIdx]
+                        if (!expectedToken) {
+                            throw new Error(`No expected token at #${eIdx}, but expected token at that index has content?  This shouldn't be possible.`)
+                        }
                         // Check that the scopes on this explanation contain the expected scopes.
-                        const scopesArray = expected[eIdx].scopeName.map((scopeName) =>
+                        const scopesArray = expectedToken.scopeName.map((scopeName) =>
                             [{
                                 scopeName: expect.stringMatching(scopeName),
                                 themeMatches: expect.anything(),
@@ -64,8 +69,8 @@ const checkTokenScopes = (
                             scopes: expect.arrayContaining(scopesArray[0])
                         })
                         // Check that the scopes do not include any of the not-scopes.
-                        if (expected[eIdx].notScopeName) {
-                            const notScopesArray = expected[eIdx].notScopeName.map((scopeName) =>
+                        if (expectedToken.notScopeName) {
+                            const notScopesArray = expectedToken.notScopeName.map((scopeName) =>
                                 [{
                                     scopeName: expect.stringMatching(scopeName),
                                     themeMatches: expect.anything(),
