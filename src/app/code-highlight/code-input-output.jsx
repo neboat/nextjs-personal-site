@@ -32,9 +32,8 @@ async function pasteRich(rich, plain) {
 }
 
 // Default code example to show when page is loaded.
-const defaultInputCode =
-    `// -------------------- This comment is 80 characters long. --------------------
-int64_t fib(int64_t n) {
+const InputCode = [
+`int64_t fib(int64_t n) {
   if (n < 2) return n;
   int64_t x, y;
   cilk_scope {
@@ -42,7 +41,157 @@ int64_t fib(int64_t n) {
     y = fib(n-2);
   }
   return x + y;
-}`
+}`,
+
+`template <typename T>
+void vecadd(std::vector<T> &out, const std::vector<T> &in) {
+  cilk_for (auto [x, y] : std::views::zip(out, in)) {
+    x += y;
+  }
+}`,
+
+`Scalar sum_product(const Scalar *A, const Scalar *B,
+                   const Scalar *C, size_t N) {
+    Scalar cilk_reducer(id_fn, reducer_fn) sum = 0;
+    cilk_for (size_t i = 0; i < N; i++) {
+        Scalar product = A[i] * B[i] * C[i];
+        sum += product;
+    }
+    return sum;
+}`,
+
+`template <typename T> void sample_qsort(T* begin, T* end) {
+  if (end - begin < BASE_CASE_LENGTH) {
+    std::sort(begin, end);  // Base case: Serial sort
+  } else {
+    --end;  // Exclude last element (pivot) from partition
+    T* middle = std::partition(begin, end, [pivot=*end](T a) { return a < pivot; });
+    std::swap(*end, *middle);  // Move pivot to middle
+    cilk_scope {
+      cilk_spawn sample_qsort(begin, middle);
+      sample_qsort(++middle, ++end);  // Exclude pivot and restore end
+    }
+  }
+}`,
+
+`namespace cilk {
+template <typename T> static void zero(void *v) {
+    *static_cast<T *>(v) = static_cast<T>(0);
+}
+template <typename T> static void plus(void *l, void *r) {
+    *static_cast<T *>(l) += *static_cast<T *>(r);
+}
+template <typename T> using opadd_reducer = T cilk_reducer(zero<T>, plus<T>);
+} // namespace cilk`,
+
+`template <typename A> static void init(void *view) {
+    new(view) A;
+}
+template <typename A> static void reduce(void *left, void *right) {
+    if (std::is_destructible<A>::value)
+        static_cast<A *>(right)->~A();
+}
+template <typename A>
+using holder = A cilk_reducer(init<A>, reduce<A>);`,
+
+`void down_sweep(V &prefix) {
+  if (!l_child && !r_child) {
+    // At a leaf, broadcast the prefix over the range
+    cilk_for (ssize_t i = r.start; i <= r.end; ++i) {
+      value_reduce_to_right(prefix, &array[i]);
+      leaf_reduce(array[i], i);
+    }
+  } else {
+    cilk_scope {
+      assert(l_child && r_child);
+      // Add the prefix to the end of l_child's range, to compute the
+      // prefix for r_child.
+      V r_prefix = internal_reduce(&prefix, &l_child->sum);
+      // Recursively down-sweep l_child and r_child in parallel.
+      cilk_spawn l_child->down_sweep(prefix);
+      r_child->down_sweep(r_prefix);
+    }
+    delete l_child;
+    delete r_child;
+  }
+}`,
+
+`template <typename T>
+using Bag_reducer = Bag<T> cilk_reducer(Bag<T>::identity, Bag<T>::reduce);
+void Graph::pbfs_walk_Bag(Bag<int> &b, Bag_reducer<int> &next,
+                          int newdistance, int distances[]) const {
+  if (b.getFill() > 0) {
+    // Split the bag and recurse
+    Pennant<int> *p = nullptr;
+    b.split(&p);
+    cilk_spawn pbfs_walk_Pennant(p, next, newdistance, distances);
+    pbfs_walk_Bag(b, next, newdistance, distances);
+  } else {
+    // Process the filling array
+    int *n = b.getFilling();
+    int fillSize = b.getFillingSize();
+    int extraFill = fillSize % THRESHOLD;
+    cilk_spawn pbfs_proc_Node(n + fillSize - extraFill, extraFill, next,
+                              newdistance, distances, nodes, edges);
+    cilk_for (int i = 0; i < fillSize - extraFill; i += THRESHOLD)
+      pbfs_proc_Node(n + i, THRESHOLD, next, newdistance, distances,
+                     nodes, edges);
+  }
+}`,
+
+`void queens(BoardList* board_list, board_t cur_board, row_t row, row_t down,
+            row_t left, row_t right) {
+  if (row == N) {
+    // A solution to 8 queens!
+    append_node(board_list, cur_board);
+  } else {
+    int open_cols_bitmap = BITMASK & ~(down | left | right);
+
+    cilk_scope while (open_cols_bitmap != 0) {
+      int bit = -open_cols_bitmap & open_cols_bitmap;
+      int col = log2(bit);
+      open_cols_bitmap ^= bit;
+
+      // Recurse! This can be parallelized.
+      cilk_spawn queens(board_list, cur_board | board_bitmask(row, col), row + 1,
+                        down | bit, (left | bit) << 1, (right | bit) >> 1);
+    }
+  }
+}`,
+
+`unsigned char *cilk_mandelbrot(double x0, double y0, double x1, double y1,
+                               int width, int height, int max_depth) {
+  double xstep = (x1 - x0) / width;
+  double ystep = (y1 - y0) / height;
+  unsigned char *output = static_cast<unsigned char *>(
+      aligned_alloc(64, width * height * sizeof(unsigned char)));
+  // Traverse the sample space in equally spaced steps with width * height
+  // samples
+  cilk_for (int j = 0; j < height; ++j) {
+    cilk_for (int i = 0; i < width; ++i) {
+      double z_real = x0 + i * xstep;
+      double z_imaginary = y0 + j * ystep;
+      double c_real = z_real;
+      double c_imaginary = z_imaginary;
+      int depth = 0;
+      // Figures out how many recurrences are required before divergence, up to
+      // max_depth
+      while (depth < max_depth) {
+        if (z_real * z_real + z_imaginary * z_imaginary > 4.0)
+          break; // Escape from a circle of radius 2
+        double temp_real = z_real * z_real - z_imaginary * z_imaginary;
+        double temp_imaginary = 2.0 * z_real * z_imaginary;
+        z_real = c_real + temp_real;
+        z_imaginary = c_imaginary + temp_imaginary;
+        ++depth;
+      }
+      output[j * width + i] = static_cast<unsigned char>(
+          static_cast<double>(depth) / max_depth * 255);
+    }
+  }
+  return output;
+}`,
+]
 
 // const Tooltip = ({ children, ...rest }) => {
 //     // const [open, setOpen] = React.useState(false)
@@ -59,7 +208,7 @@ int64_t fib(int64_t n) {
 
 export const CodeInputOutput = () => {
     const [formData, setFormData] = React.useState({
-        inputCode: defaultInputCode,
+        inputCode: '',
         inputCodeLang: "cilkcpp",
         inputCodeStyle: "cilkbook"
     })
@@ -75,6 +224,13 @@ export const CodeInputOutput = () => {
     }
 
     React.useEffect(() => {
+        // This runs only on the client after the component mounts
+        setFormData(prevState => ({
+            ...prevState,
+            inputCode: InputCode[Math.floor(Math.random() * InputCode.length)]}));
+    }, [])
+
+    React.useEffect(() => {
         const code = formData.inputCode
         const lang = formData.inputCodeLang
         const style = formData.inputCodeStyle
@@ -83,7 +239,7 @@ export const CodeInputOutput = () => {
             div.innerHTML = await CilkBookHighlight(code, lang, style)
         }
         getHighlighted(code, lang, style)
-    })
+    }, [formData])
 
     // Action for copying formatted output to the clipboard.
     const copyFormattedToClipboard = () => {
