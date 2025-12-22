@@ -57,7 +57,7 @@ function getExplainedSubtokens(parsedToken: ThemedToken) {
 type SemanticScope =
     | 'source'
     | 'vardef'
-    | 'rhs'
+    | 'vardefaftername'
     | 'assignment'
     | 'function.head'
     | 'function.body'
@@ -826,7 +826,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         ctx.popScope()
                         ctx.pushScope('function.body')
                     } else if (matchesAny(['keyword.operator.assignment'], scopes)) {
-                        ctx.pushScope('rhs')
+                        ctx.pushScope('vardefaftername')
                         ctx.pushScope('assignment')
                     }
                     cursor.flushCurrentSubtoken()
@@ -872,6 +872,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         // Enter vardef to process a possible variable definition.
                         ctx.pushScope('vardef')
                     }
+                    cursor.flushCurrentSubtoken()
                     continue
                 }
 
@@ -879,7 +880,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                     if (matchesAny(['entity.name.function.call.cpp'], scopes)) {
                         // Constructor call.  Mark this variable name as a definition.
                         cursor.pushCurrentSubtoken({ name: 'variable.other.declare' })
-                        ctx.pushScope('rhs')
+                        ctx.pushScope('vardefaftername')
                         continue
                     } else if (matchesAny(['entity.name.function'], scopes)) {
                         // The function name indicates this isn't a variable definition.
@@ -917,16 +918,19 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         ctx.popScope()
                         cursor.skipAdvance()
                         continue
-                    } else if (matchesAny(['punctuation.definition.begin.bracket.square'], scopes)) {
-                        // Start of an array index.  Push an arrayidx scope to process it.
-                        ctx.pushScope('arrayidx')
+                    } else if (matchesAny(['punctuation.section.arguments.begin.bracket.round.function.call'], scopes)) {
+                        // Actually a function call, not a variable definition.
+                        // Pop this scope and process this subtoken in the parent.
+                        ctx.popScope()
+                        cursor.skipAdvance()
+                        continue
                     } else if (matchesAny(['storage.modifier.specifier.cilk_reducer'], scopes)) {
                         // Start of a Cilk reducer specification.
                         ctx.pushScope('parens')
                     } else if (matchesAny(['variable.other.declare', 'variable.other.object', 'variable.other.unknown', 'variable.object', 'variable.other.assignment'], scopes.slice(-1))) {
                         // Mark this variable as a definition.
                         cursor.pushCurrentSubtoken({ name: 'variable.other.declare' })
-                        ctx.pushScope('rhs')
+                        ctx.pushScope('vardefaftername')
                         continue
                     } else if (matchesAny(['meta.body.function', 'meta.body.struct', 'meta.tail.struct', 'meta.body.class', 'meta.body.union', 'meta.tail.union', 'meta.block', 'meta.parens', 'source'], scopes.slice(-1))) {
                         // Process this variable definition.
@@ -950,7 +954,12 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         }
                         // Mark this variable name as a definition.
                         cursor.pushCurrentSubtoken({ name: 'variable.other.declare' })
-                        ctx.pushScope('rhs')
+                        ctx.pushScope('vardefaftername')
+                        continue
+                    } else if (matchesAny(['punctuation.separator.colon.range-based'], scopes)) {
+                        // End of this variable definition.
+                        ctx.popScope()
+                        cursor.flushCurrentSubtoken()
                         continue
                     } else if (subtoken.content === '*') {
                         // Mark this subtoken as a pointer modifier.
@@ -965,12 +974,15 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                     continue
                 }
 
-                if (ctx.scopeIs('rhs')) {
-                    if (matchesAny(['punctuation.terminator.statement', 'punctuation.definition.capture.end.lambda'], scopes)) {
+                if (ctx.scopeIs('vardefaftername')) {
+                    if (matchesAny(['punctuation.terminator.statement', 'punctuation.definition.capture.end.lambda', 'punctuation.separator.colon.range-based'], scopes)) {
                         // End of this assignment.  Process this subtoken in the parent scope.
                         ctx.popScope()
                         cursor.skipAdvance()
                         continue
+                    } else if (matchesAny(['punctuation.definition.begin.bracket.square'], scopes)) {
+                        // Start of an array index.  Push an arrayidx scope to process it.
+                        ctx.pushScope('arrayidx')
                     } else if (matchesAny(['keyword.operator.assignment'], scopes)) {
                         // Push an assignment.rhs scope to process the right-hand side of this assignment.
                         ctx.pushScope('assignment')
