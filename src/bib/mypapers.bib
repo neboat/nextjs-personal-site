@@ -1,3 +1,22 @@
+@inproceedings{SingerAgSc26,
+author = {Singer, Kyle and Agrawal, Kunal and Schardl, Tao B.},
+title = {Waste-Efficient Work Stealing},
+year = {2026},
+isbn = {9798400723100},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3774934.3786452},
+doi = {10.1145/3774934.3786452},
+abstract = {Although randomized work stealing is effective at automatically load-balancing task-parallel programs, it can waste computational resources when scheduling programs that lack sufficient parallelism to use all available threads. For such programs, threads will waste cycles attempting to steal parallel tasks when none are available. This waste can reduce the machine’s efficiency by wasting computational resources and energy and needlessly burdening the operating system. This paper introduces WEWS, a simple, practical, and provably efficient extension to randomized work stealing that mitigates waste. WEWS dynamically adjusts the number of active threads to reduce the waste of randomized work stealing. WEWS executes a parallel computation with the same asymptotic running time as traditional randomized work stealing while bounding the waste to O(min{PT∞, T1 + P2}) instructions. WEWS also follows the work-first principle to perform well in practice. WEWS requires no special support from the operating system or hardware, which simplifies its implementation. We implemented WEWS within the OpenCilk runtime system and compared it to other common waste-mitigation strategies. Across 10 parallel benchmarks, we find that WEWS has minimal impact on parallel running times while, on programs with limited parallelism, substantially reducing waste.},
+optbooktitle = {Proceedings of the 31st ACM SIGPLAN Annual Symposium on Principles and Practice of Parallel Programming},
+booktitle = {PPoPP},
+pages = {68–80},
+numpages = {13},
+keywords = {Cilk, OpenCilk, energy, parallel computing, parallel runtime system, task parallelism, waste, work stealing},
+location = {Sydney, NSW, Australia},
+series = {PPoPP '26}
+}
+
 @inproceedings{HandlemanSiSc25,
   author       = {Handleman, Aaron and Singer, Kyle and Schardl, Tao B. and Lee, I-Ting Angelina},
   title        = {Towards Zero Spawn Overhead: Work Stealing Without Deques},

@@ -32,7 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Header />
                 {children}
             </body>
-            <GoogleAnalytics gaId="G-6TCR87FRLX" />
+            {process.env.NODE_ENV === 'production' && (
+                <GoogleAnalytics gaId="G-6TCR87FRLX" />
+            )}
         </html>
     )
 }
