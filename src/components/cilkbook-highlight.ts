@@ -1,5 +1,6 @@
-import { getSingletonHighlighter, addClassToHast, BundledLanguage, BundledTheme, HighlighterGeneric, ThemeInput, LanguageInput } from 'shiki/bundle/web'
+import { getSingletonHighlighter, addClassToHast, BundledLanguage, BundledTheme, HighlighterGeneric, ThemeInput, LanguageInput } from 'shiki/bundle/full'
 import { SemanticHighlight } from './semantichighlight'
+import { SupportedLanguages as SupportsSemanticHighlighting } from './semantichighlight'
 
 // Grammars for Cilk languages
 import cilkcGrammar from "../langs/cilkc.tmLanguage.json"
@@ -16,8 +17,8 @@ let cachedHighlighter: HighlighterGeneric<BundledLanguage, BundledTheme> | null 
 const makeHighlighter = async () => {
     if (!cachedHighlighter)
         cachedHighlighter = await getSingletonHighlighter({
-            themes: [cilkbookTheme as ThemeInput, 'slack-dark', 'slack-ochin', 'solarized-dark', 'solarized-light'],
-            langs: ['c', 'cpp',
+            themes: [cilkbookTheme as ThemeInput],
+            langs: [
                 { ...cilkcppGrammar } as unknown as LanguageInput,
                 { ...cilkcGrammar } as unknown as LanguageInput
             ],
@@ -32,12 +33,21 @@ const makeHighlighter = async () => {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const CilkBookHighlight = async (code: string, lang: string, theme: string = 'cilkbook', className?: string, ...rest: any[]) => {
     const highlighter = await makeHighlighter()
+    if (!highlighter.getLoadedLanguages().includes(lang)) {
+        await highlighter.loadLanguage(lang as unknown as LanguageInput)
+    }
+    if (!highlighter.getLoadedThemes().includes(theme)) {
+        await highlighter.loadTheme(theme as ThemeInput)
+    }
     return highlighter.codeToHtml(code, Object.assign({
         lang: lang,
         theme: theme,
         includeExplanation: 'scopeName',
         transformers: [{
             tokens(tokens: any) {
+                if (!SupportsSemanticHighlighting.includes(lang))
+                    return tokens
+
                 // console.log(tokens)
                 const semanticTokens = SemanticHighlight(tokens, highlighter.getTheme(theme))
                 // console.log(semanticTokens)

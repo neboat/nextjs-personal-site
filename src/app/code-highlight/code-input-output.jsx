@@ -280,6 +280,8 @@ export const CodeInputOutput = () => {
                             <option value="cilkc">Cilk/C</option>
                             <option value="cpp">C++</option>
                             <option value="c">C</option>
+                            <option value="llvm">LLVM IR</option>
+                            <option value="python">Python</option>
                         </select>
                     </div>
                     <div className="table-cell whitespace-nowrap has-tooltip">
@@ -287,10 +289,16 @@ export const CodeInputOutput = () => {
                         {/* <Tooltip>Select style</Tooltip> */}
                         <select className="text-md rounded-xs px-1 border bg-neutral-100 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:ring-blue-500 focus:border-blue-500" name="inputCodeStyle" id="inputCodeStyle" onChange={handleInput} value={formData.inputCodeStyle}>
                             <option value="cilkbook">Cilkbook</option>
-                            <option value="slack-dark">Slack dark</option>
-                            <option value="slack-ochin">Slack light</option>
-                            <option value="solarized-dark">Solarized dark</option>
-                            <option value="solarized-light">Solarized light</option>
+                            <option value="slack-dark">Slack Dark</option>
+                            <option value="slack-ochin">Slack Ochin</option>
+                            <option value="solarized-dark">Solarized Dark</option>
+                            <option value="solarized-light">Solarized Light</option>
+                            <option value="dark-plus">Dark Plus</option>
+                            <option value="light-plus">Light Plus</option>
+                            <option value="github-dark">GitHub Dark</option>
+                            <option value="github-light">GitHub Light</option>
+                            <option value="one-dark-pro">One Dark Pro</option>
+                            <option value="one-light">One Light</option>
                         </select>
                     </div>
                 </div>

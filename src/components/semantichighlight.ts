@@ -1,6 +1,8 @@
 import { ThemedToken, ThemeRegistrationResolved } from 'shiki/bundle/web'
 import { FontStyle, IRawThemeSetting } from '@shikijs/vscode-textmate'
 
+export const SupportedLanguages = ['cilkcpp', 'cilkc', 'cpp', 'c']
+
 const DEBUG = false
 
 function debug_print(str: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
