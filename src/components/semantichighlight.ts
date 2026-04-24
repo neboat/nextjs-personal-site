@@ -867,6 +867,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         ctx.pushScope('vardef')
                     } else if (ctx.isKnownType(subtoken.content)) {
                         // Mark this subtoken as a type.
+                        ctx.splitTypeToken(subtoken, cursor)
                         cursor.pushCurrentSubtoken({ name: 'entity.name.type.defined' })
                         // Enter vardef to process a possible variable definition.
                         ctx.pushScope('vardef')
@@ -1088,6 +1089,7 @@ export function SemanticHighlight(tokens: ThemedToken[][], _theme: ThemeRegistra
                         ctx.popScope()
                         cursor.skipAdvance()
                     }
+                    cursor.flushCurrentSubtoken()
                     continue
                 }
 
