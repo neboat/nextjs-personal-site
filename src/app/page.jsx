@@ -72,6 +72,7 @@ const IndexPage = () => {
           }}
           alt="Picture of Tao B. (TB) Schardl"
           src={`/neboat-personal-website-self`}
+          loading="eager"
         />{` `} <span className="inline-block align-baseline!">Tao B. (TB) Schardl</span></h1>
       <Content />
       {moreLinks.map((link, i) => (
