@@ -29,19 +29,26 @@ int fib(int n) {
 }
 ```
 
-OpenCilk extends C/C++ with a few keywords to expose logical task parallelism in a program.  The OpenCilk compiler optimizes Cilk programs using Tapir/LLVM, an extension to LLVM to enable effective compiler analysis and optimization of task-parallel programs.  The OpenCilk runtime system schedules and load-balances the Cilk computation automatically in a provably good manner using randomized work stealing.  The OpenCilk platform also provides tools to analyze Cilk programs, including the Cilksan race detector and the Cilkscale scalability analyzer.
+OpenCilk extends C/C++ with a few keywords to expose logical task parallelism in a program.  The OpenCilk compiler optimizes Cilk programs using Tapir/LLVM, an extension to LLVM to enable effective compiler analysis and optimization of task-parallel programs.  The OpenCilk runtime system schedules and load-balances the Cilk computation automatically in a provably good manner using randomized work stealing.
 
-OpenCilk is completely open source and available on [GitHub](https://github.com/OpenCilk/).  OpenCilk features the latest implementation of the Tapir compiler extension for task parallelism.
+In addition to the `cilk_spawn`, `cilk_sync`, and `cilk_for` keywords from previous versions of Cilk, OpenCilk supports the following:
+- The `cilk_scope` keyword, that defines a lexical scope that synchronizes spawned functions.
+- The `cilk_reducer` keyword, that provides language support for reducers.
+- Range-`cilk_for` loops, that allow for parallel execution of [C++ range-for loops](https://en.cppreference.com/cpp/language/range-for) on ranges that support random access.
 
-<Reference citekeys={["SchardlLe23", "SchardlMoLe19", "SchardlMoLe17"]} />
+OpenCilk also provides tools to analyze Cilk programs, including the Cilksan race detector and the Cilkscale scalability analyzer, as well as the CSI framework for compiler instrumentation.  For a given program and input, Cilksan offers a provable guarantee to find a race in the program, if one exists under any scheduling, or to certify that no races exist.  Cilkscale measures the program's work, span, and parallelism to evaluate how the program's performance will scale on different numbers of processors.  Both Cilksan and Cilkscale use Tapir and CSI, a framework for writing tool libraries that use compiler-inserted instrumentation efficiently.
+
+OpenCilk is completely open source and freely available on [GitHub](https://github.com/OpenCilk/).  OpenCilk features the latest implementation of the Tapir compiler extension for task parallelism and the CSI compiler-instrumentation framework.
+
+<Reference citekeys={["SchardlLe23", "SchardlMoLe19", "SchardlDeDo17", "SchardlMoLe17"]} />
 
 ## CHEFSI
 
-[CHEFSI](https://chefsi.mit.edu) is an interdisciplinary research center at MIT focused on the exascale simulation of coupled high enthalpy fluid-solid interactions.  See the CHEFSI website for details.
+[CHEFSI](https://chefsi.mit.edu) is an interdisciplinary research center at MIT focused on the exascale simulation of coupled high enthalpy fluid-solid interactions.  See the [CHEFSI website](https://chefsi.mit.edu) for details.
 
 ## CESMIX
 
-[CESMIX](https://cesmix.mit.edu) is an interdisciplinary research center at MIT focused on the exascale simulation of materials in hypersonic flow environments.  See the CESMIX website for details.
+[CESMIX](https://cesmix.mit.edu) is an interdisciplinary research center at MIT focused on the exascale simulation of materials in hypersonic flow environments.  See the [CESMIX website](https://cesmix.mit.edu) for details.
 
 ## Other projects
 
@@ -75,7 +82,7 @@ This web-based tool adds syntax and semantic highlighting to C/C++ and Cilk code
   { text: "GitHub", url: "https://github.com/neboat/pbfs" }
 ]} />
 
-PBFS is a work-efficient parallel breadth-first-search (BFS) algorithm.  PBFS uses a custom reducer data structure, called a bag, to efficiently maintain sets of vertices.  PBFS is currently implemented in OpenCilk, and the bag reducer is implemented using the linguistic reducer syntax introduced in OpenCilk 2.
+PBFS is a work-efficient parallel breadth-first-search (BFS) algorithm.  PBFS uses a custom reducer data structure, called a bag, to efficiently maintain sets of vertices.  PBFS is currently implemented in OpenCilk, and the bag reducer is implemented using OpenCilk's `cilk_reducer` keyword.
 
 <Reference citekeys={["LeisersonSc10"]} />
 
